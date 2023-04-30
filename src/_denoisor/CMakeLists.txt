@@ -1,0 +1,12 @@
+include_directories(${CMAKE_CURRENT_SOURCE_DIR})
+add_subdirectory(reclusive_event_denoisor)
+add_subdirectory(yang_noise)
+add_subdirectory(double_window_filter)
+add_subdirectory(khodamoradi_noise)
+add_subdirectory(time_surface)
+add_subdirectory(event_flow)
+
+if(DEFINED TORCH_DIR)
+    add_subdirectory(multiLayer_perceptron_filter)
+    add_subdirectory(event_denoise_convolution_network)
+endif()
