@@ -94,7 +94,7 @@ You can add the path where this project located in and you will find the list of
 When installed LibTorch, you can compile `setup.sh` with `<path/to/libtorch>` as follows:
 
 ```bash
-sh setup.py -l <path/to/libtorch>/share/cmake/Torch/
+sh setup.sh -l <path/to/libtorch>/share/cmake/Torch/
 ```
 
 Download [pretrained models](https://drive.google.com/drive/folders/1BytQnsNRlv1rJyMotElIqklOz1oCt2Vd?usp=sharing) and paste them into `./modules/_net/` folder.

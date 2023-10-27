@@ -1,5 +1,7 @@
 build/
 dist/
+results/
+modules/_net
 src/evtool.egg-info
 __pycache__/
 .vscode

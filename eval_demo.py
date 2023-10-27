@@ -38,21 +38,27 @@ if __name__ == '__main__':
         length = min(length, len(dataDict[model]))
 
     # initialize animation
-    obj = []
-    fig, axs = plt.subplots(2, 4, figsize=(15, 6))
+    obj, m, n = [], 2, 4
+    fig, axs = plt.subplots(m, n, figsize=(15, 6))
     for j, (model, data) in enumerate(dataDict.items()):
-        x, y = np.unravel_index(j, (2, 4))
+        x, y = np.unravel_index(j, (m, n))
         obj.append(axs[x][y].imshow(np.zeros(size), vmin=-1, vmax=1, cmap=plt.set_cmap('bwr')))
-        axs[x][y].set_axis_off()
+        if model == 'none':
+            axs[x][y].set_axis_off()
+        else:
+            axs[x][y].set_xticks([])
+            axs[x][y].set_yticks([])
+            axs[x][y].xaxis.set_tick_params(labelbottom=False)
+            axs[x][y].yaxis.set_tick_params(labelleft=False)
 
     def update(i):
         for j, (denoisor, data) in enumerate(dataDict.items()):
-            x, y = np.unravel_index(j, (2, 4))
+            x, y = np.unravel_index(j, (m, n))
             if denoisor == 'none': continue
             timestamp, event = data[i]
             obj[j].set_data(event.project(size))
-            axs[x][y].set_title(denoisor)
+            axs[x][y].set_title(denoisor, fontdict={'fontsize': 18, 'family': 'serif', 'weight':'normal'})
 
     # running animation
     Player = Animator(fig, update, ticks=[i for i in range(length)])
-    Player.run()
+    Player.run("result.gif")

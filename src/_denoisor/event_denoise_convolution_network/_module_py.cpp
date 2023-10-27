@@ -40,14 +40,13 @@ namespace kpy {
                     torch::Tensor output = module.forward({batch.to(device)}).toTensor().to(torch::kCPU);
 
                     for (; k >= 0; k--) {
-                        std::cout << output[k] << std::endl;
+                        // std::cout << output[k] << std::endl;
                         if (output[k][1].item<float_t>() >= threshold) {
                             vec.push_back(true);
                         } else {
                             vec.push_back(false);
                         }
                     }
-                    break;
                 }
             }
 
@@ -60,5 +59,5 @@ namespace kpy {
 PYBIND11_MODULE(event_denoise_convolution_network, m) {
     py::class_<kpy::EventDenoiseConvolutionNetwork>(m, "init", py::module_local())
         .def(py::init<int16_t, int16_t>())
-        .def("run", &kpy::EventDenoiseConvolutionNetwork::run, py::arg("input"), py ::arg("model_path") = "None", py::arg("batch_size") = 1000, py ::arg("depth") = 2, py::arg("square_r") = 12, py::arg("threshold") = 0.8);
+        .def("run", &kpy::EventDenoiseConvolutionNetwork::run, py::arg("input"), py ::arg("model_path") = "None", py::arg("batch_size") = 1000, py ::arg("depth") = 2, py::arg("square_r") = 12, py::arg("threshold") = 0.5);
 }

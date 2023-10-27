@@ -107,9 +107,15 @@ class mlpf(BaseDenoisor):
 
 
 class edncnn(BaseDenoisor):
-    def __init__(self, params={}):
+    def __init__(self,
+                 params={"model_path": os.getcwd() + '/modules/_net/EDnCNN_all_trained_v9.pt',
+                         "batch_size": 1000,
+                         "depth": 2,
+                         "square_r": 12,
+                         "threshold": 0.5}):
+        from modules import event_denoise_convolution_network
         super().__init__(
-            "TODO",
+            event_denoise_convolution_network,
             **params
         )
 
