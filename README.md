@@ -5,49 +5,134 @@ The simple benchmark for event-based denoising. Any questions please contact me 
 <span id="animation"></span>
 ![animation](https://raw.githubusercontent.com/KugaMaxx/cuke-emlb/main/assets/images/animation.gif "animation")
 
-
-
 ## Installation
-
-Make sure that your device meets:
-  + Ubuntu with [Cmake](https://cmake.org/) ≥ 3.5.1 and Python ≥ 3.8.
-  + [DV](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/) and [LibTorch](https://pytorch.org/) are optimal.
-
 
 ### Dependencies
 
-Install dependencies, including [Pybind11](https://pybind11.readthedocs.io/en/stable/) (for python), [Boost](https://www.boost.org/) and [OpenBlas](https://www.openblas.net/) (for optimized performance):
+To ensure the running of the project, the following dependencies are need.
+
++ Install common dependencies.
+
+```bash
+# Install compiler
+sudo apt-get install git gcc-10 g++-10 cmake
+
+# Install boost, opencv, eigen3, openblas
+sudo apt-get install libboost-dev, libopencv-dev, libeigen3-dev, libopenblas-dev
+```
+
++ Install third-party dependencies for dv.
+
+```bash
+# Add repository
+sudo add-apt-repository ppa:inivation-ppa/inivation
+
+# Update
+sudo apt-get update
+
+# Install pre dependencies
+sudo apt-get install boost-inivation libcaer-dev libfmt-dev liblz4-dev libzstd-dev libssl-dev
+
+# Install dv
+sudo apt-get install dv-processing
+```
+
++ Initialize our [dv-toolkit](https://github.com/KugaMaxx/yam-toolkit), for
+simplifying the processing of event-based data.
+
+```bash
+# Recursively initialize our submodule
+git submodule update --init --recursive
+```
+
+## Build from source
+
+### For DV software usage
+
+By following the steps below, you will obtain a series of `.so` files in the 
+`./modules` folder, which are third-party modules that can be called by 
+[DV software](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/). 
+For how to use them, please refer to the "set up for dv" in the 
+[tutorial](https://inivation.gitlab.io/dv/dv-docs/docs/first-module/).
+
++ Install dependencies for building modules.
+
+```bash
+sudo apt-get install dv-runtime-dev
+```
+
++ Compile with setting `-DEMLB_ENABLE_MODULES`
+
+```bash
+# create folder
+mkdir build && cd build
+
+# compile with samples
+CC=gcc-10 CXX=g++-10 cmake .. -DEMLB_ENABLE_MODULES=ON
+
+# generate library
+cmake --build . --config Release
+```
+
+### For script usage
+
+In this section, the model will be built as Python packages by using pybind11, 
+allowing directly import in your project. If using C++ language, you can 
+directly copy the header files in `./include` and following 
+[tutorial](https://dv-processing.inivation.com/rel_1.7/event_filtering.html) to
+see how to use.
+
++ Install dependencies for building packages.
+
 ```bash
 sudo apt-get install python3-dev python3-pybind11
-sudo apt-get install libboost-dev
-sudo apt-get install libopenblas-dev
 ```
 
++ Create a new virtual environment:
 
-### Build from source
-
-Create a new virtual environment (recommended):
 ```bash
-conda create -n emlb python=3.10
+# Create virtual environment
+conda create -n emlb python=3.8
+
+# Activate virtual environment
 conda activate emlb
+
+# Install requirements
+pip install -r requirements.txt
 ```
 
-First, clone this repo and build by `setup.sh`:
++ Compile with setting `-DEMLB_ENABLE_PYTHON`
+
 ```bash
-sh setup.sh
+# create folder
+mkdir build && cd build
+
+# compile with samples
+CC=gcc-10 CXX=g++-10 cmake .. -DEMLB_ENABLE_PYTHON=ON
+
+# generate library
+cmake --build . --config Release
 ```
++ Run `demo.py` to test:
 
-
-### Running a demo
-
-Run `eval_demo.py` to test:
 ```bash
-python eval_demo.py
+python3 demo.py
 ```
 
-Then you will receive the visualization results as shown in [gif](#animation).
+### CUDA support <span id="cuda"></span>
 
+Assuming that [libtorch](https://pytorch.org/cppdocs/installing.html) is 
+installed, you can include `-DTORCH_DIR=/path/to/libtorch/` to compile deep 
+learning models. For example, you can build by following instruction.
 
+```bash
+CC=gcc-10 CXX=g++-10 cmake .. \
+-DEMLB_ENABLE_PYTHON=ON \
+-DTORCH_DIR=<path/to/libtorch>/share/cmake/Torch/
+```
+
+NOTE: download pretrained models [here](https://drive.google.com/drive/folders/1BytQnsNRlv1rJyMotElIqklOz1oCt2Vd?usp=sharing) 
+and paste them into `./modules/net/` folder.
 
 ## Inference with SOTA
 
@@ -66,44 +151,46 @@ At present, we have implemented the following event-based denoising algorithms.
 | [GEF](#gef)       | Guided Event Filter           | 2021 | Python    | ✓   |      |
 | [RED](#red)       | Recursive Event Denoisor      | -    | C++       | ✓   |      |
 
+### Running by single file
+
 You can run `eval_denoisor.py` to test one of the above denoising algorithms:
 
 ```bash
-python eval_denoisor.py --denoisor knoise
+python eval_denoisor.py                     \
+--file './data/demo/samples/demo-01.aedat4' \
+--denoisor 'ynoise'                         
+```
+
++ `--file` / `-f`: path of sequence data.
++ `--denoisor`: select a denoising algorithm. You can revise denoisor's 
+parameters in `./configs/denoisors.py`.
+
+NOTE: Some algorithms need to install LibTorch in advance and 
+[compile with cuda](#cuda).
+
+### Running by datasets
+
+You can run `eval_benchmark.py` to test all sequences store in `./data` folder.
+
+```bash
+python eval_benchmark.py  \
+--input_path './data'     \
+--output_path './result'  \
+--denoisor 'ynoise' --store_result --store_score
 ```
 
 + `--input_path` / `-i`: path of the datasets folder.
-+ `--output_path` / `-o`: path of denoising results. If not set, it will not be saved to disk.
-+ `--denoisor` / `-d`: select a denoising algorithm which can be found in `./configs/denoisors.py`. Some algorithms need to be compiled after installing LibTorch, please refer to [CUDA compile](#cuda) for details.
-+ `--excl_hotpixel`: decide whether to remove hot pixels in advance.
++ `--output_path` / `-o`: path of saving denoising results.
++ `--denoisor`: select a denoising algorithm. You can revise denoisor's 
+parameters in `./configs/denoisors.py`.
++ `--store_result`: turn on denoising result storing.
++ `--store_score`: turn on mean ESR score calculation.
 
-
-### DV support
-
-If you want to test above modules in DV software, please install the following additional package and then recompile `setup.sh`:
-
-```bash
-sudo apt-get install dv-runtime-dev
-```
-
-You can add the path where this project located in and you will find the list of available modules. More details please refer to the [DV's official guide](https://inivation.gitlab.io/dv/dv-docs/docs/first-module/). It should be noted that we have not solved the problem of CNN method running in DV.
-
-
-### CUDA compile <span id="cuda"></span>
-
-When installed LibTorch, you can compile `setup.sh` with `<path/to/libtorch>` as follows:
-
-```bash
-sh setup.sh -l <path/to/libtorch>/share/cmake/Torch/
-```
-
-Download [pretrained models](https://drive.google.com/drive/folders/1BytQnsNRlv1rJyMotElIqklOz1oCt2Vd?usp=sharing) and paste them into `./modules/_net/` folder.
-
-
+NOTE: The structure of the dataset folder must meet the [requirements](#datasets).
 
 ## Building your own denoising benchmark
 
-### Datasets
+### Datasets <span id="datasets"></span>
 
 Download our **Event Noisy Dataset (END)**, including [D-END](https://drive.google.com/file/d/1ZatTSewmb-j6RsrJxMWEQIE3Sm1yraK-/view?usp=sharing) (Daytime part) and [N-END](https://drive.google.com/file/d/17ZDhuYdtHui9nqJAfiYYX27omPY7Rpl9/view?usp=sharing) (Night part), then unzip and paste them into `./data` folder:
 
@@ -129,7 +216,8 @@ Download our **Event Noisy Dataset (END)**, including [D-END](https://drive.goog
 ├── ...
 ```
 
-Also you can paste your customized datasets into `/data` folder(supported file types can be checked at [here](https://github.com/KugaMaxx/taro-dvstoolkit)). They should be rearranged as the following structure: 
+Also you can paste your customized datasets into `./data` folder (only supported 
+aedat4 file now). They should be rearranged as the following structure: 
 
 ```
 ./data/
@@ -146,23 +234,28 @@ Also you can paste your customized datasets into `/data` folder(supported file t
 ├── ...
 ```
 
-
 ### Algorithms
 
 We provide a general template to facilitate building your own denoising algorithm, see `./configs/denoisors.py`:
 
 ```python
-class your_denoisor(BaseDenoisor):
-    def __init__(self, model=<your_denoisor>, **params=<paramters>):
-        super().__init__()
-        self.model = model
-        self.params = params
+class your_denoisor:
+    def __init__(self, resolution, 
+                 modified_params: Dict, 
+                 default_params: Dict) -> None:
+        # /*-----------------------------------*/
+        #         initialize parameters
+        # /*-----------------------------------*/
 
-    def run(self, data: evtool.dtype):
+    def accept(self, events):
         # /*-----------------------------------*/
-        #   input denoising implementation here
+        #   receive noise sequence and process
         # /*-----------------------------------*/
-        return data
+    
+    def generateEvents(self):
+        # /*-----------------------------------*/
+        #   perform denoising and return result
+        # /*-----------------------------------*/
 ```
 
 
@@ -290,8 +383,6 @@ This repository is derived from **[E-MLB: Multilevel Benchmark for Event-Based C
   publisher = {IEEE}
 }
 ```
-
-
 
 ## Acknowledgement
 Special thanks to [Yang Wang](mailto:ywang120@ustc.edu.cn).

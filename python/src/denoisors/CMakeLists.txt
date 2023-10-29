@@ -1,0 +1,11 @@
+pybind11_add_denoisor(double_window_filter)
+pybind11_add_denoisor(event_flow)
+pybind11_add_denoisor(khodamoradi_noise)
+pybind11_add_denoisor(reclusive_event_denoisor)
+pybind11_add_denoisor(time_surface)
+pybind11_add_denoisor(yang_noise)
+
+if(EMLB_ENABLE_TORCH)
+    pybind11_add_denoisor(event_denoise_convolution_network)
+    pybind11_add_denoisor(multi_layer_perceptron_filter)
+endif()

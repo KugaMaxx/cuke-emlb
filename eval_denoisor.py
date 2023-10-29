@@ -1,48 +1,49 @@
-import os
-import time
-import os.path as osp
 import argparse
-from tqdm import tqdm
+import os.path as osp
+from datetime import timedelta
 
-from evtool.dvs import DvsFile
-from configs import Dataset, Denoisor
+# Import dv related package
+import dv_processing as dv
+import dv_toolkit as kit
+
+# Import project config
+from configs import Denoisor
+
+# Import evaluation metric
+from python.src.utils.metric import EventStructuralRatio
 
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='Deployment of EMLB benchmark')
-    parser.add_argument('-i', '--input_path',  type=str, default='./data', help='path to load dataset')
-    parser.add_argument('-o', '--output_path', type=str, default='./results', help='path to output dataset')
-    parser.add_argument('-d', '--denoisor',    type=str, default="mlpf", help='choose denoisors')
-    parser.add_argument('--excl_hotpixel',     type=int, default=-1)
-    parser.add_argument('--output_file_type',  type=str, default='pkl', help='output file type')
+    # Arguments settings
+    parser = argparse.ArgumentParser(description='Run single denoisor and evaluation.')
+    parser.add_argument('-f', '--file', type=str, default='./data/demo/samples/demo-01.aedat4')
+    parser.add_argument('--denoisor', type=str, default='ynoise', help='choose a denoisor')
+    parser.add_argument('--parameters', type=lambda x: {k:int(v) for k,v in (i.split(':') for i in x.split(','))}, 
+                        default="intThreshold: 1", help='set parameters of the denoisor')
+    args = parser.parse_args()   
 
-    args = parser.parse_args()
+    # Load file to MonoCameraReader
+    reader = kit.io.MonoCameraReader(args.file)
+    
+    # Get Offline data
+    data = reader.loadData()
 
-    model, datasets = Denoisor(args.denoisor), Dataset(args.input_path)
-    for i, dataset in enumerate(datasets):
-        pbar = tqdm(dataset)
-        for sequence in pbar:
-            fpath, fclass, fname = sequence
-            fname, fext = osp.splitext(fname)
-            fdata = fpath.split('/')[-1]
-            
-            # Print progress bar info
-            pbar.set_description(f"{args.denoisor:>7s}"
-                                 f"{fdata:>10s} ({i+1}/{len(datasets)})"
-                                 f"{fname:>10s}")
+    # Register event structural ratio
+    metric = EventStructuralRatio(reader.getResolution())
 
-            # Load noisy file
-            data = DvsFile.load(osp.join(fpath, fclass, fname + fext))
-            if args.excl_hotpixel > 0:
-                idx = data['events'].hotpixel(data['size'], thres=1000)
-                data['events'] = data['events'][idx]
+    # Print before filter
+    score = metric.evalEventStorePerNumber(data["events"].toEventStore())
+    print(f"Before filter >>>\n  {data['events']}, \n  ESR score: {score.mean():.3f}")
 
-            # Start inference
-            data = model.run(data)
+    # Initialize denoisor
+    model = Denoisor(args.denoisor, reader.getResolution(), args.parameters)
+    
+    # Receive noise sequence
+    model.accept(data["events"])
+    
+    # Perform event denoising
+    data["events"] = model.generateEvents()
 
-            # Save inference result
-            if args.output_path is not None:
-                output_file = f"{args.output_path}/{args.denoisor}/{fclass}/{fdata}/{fname}.{args.output_file_type}"
-                output_dir, _ = osp.split(output_file)
-                if not osp.exists(output_dir): os.makedirs(output_dir)
-                DvsFile.save(data, output_file)
+    # Print after filter
+    score = metric.evalEventStorePerNumber(data["events"].toEventStore())
+    print(f"After filter <<<\n  {data['events']}, \n  ESR score: {score.mean():.3f}")
