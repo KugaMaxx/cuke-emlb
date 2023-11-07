@@ -1,5 +1,8 @@
 # E-MLB: Multilevel Benchmark for Event-Based Camera Denoising
 
+![](https://img.shields.io/github/v/tag/KugaMaxx/cuke-emlb?style=flat-square)
+![](https://img.shields.io/github/license/KugaMaxx/cuke-emlb?style=flat-square)
+
 The simple benchmark for event-based denoising. Any questions please contact me with [KugaMaxx@outlook.com](mailto:KugaMaxx@outlook.com).
 
 <span id="animation"></span>
@@ -165,7 +168,7 @@ python eval_denoisor.py                     \
 + `--denoisor`: select a denoising algorithm. You can revise denoisor's 
 parameters in `./configs/denoisors.py`.
 
-NOTE: Some algorithms need to install LibTorch in advance and 
+NOTE: Some algorithms need to install libtorch in advance and 
 [compile with cuda](#cuda).
 
 ### Running by datasets
