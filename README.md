@@ -50,33 +50,6 @@ git submodule update --init --recursive
 
 ## Build from source
 
-### For DV software usage
-
-By following the steps below, you will obtain a series of `.so` files in the 
-`./modules` folder, which are third-party modules that can be called by 
-[DV software](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/). 
-For how to use them, please refer to the "set up for dv" in the 
-[tutorial](https://inivation.gitlab.io/dv/dv-docs/docs/first-module/).
-
-+ Install dependencies for building modules.
-
-```bash
-sudo apt-get install dv-runtime-dev
-```
-
-+ Compile with setting `-DEMLB_ENABLE_MODULES`
-
-```bash
-# create folder
-mkdir build && cd build
-
-# compile with samples
-CC=gcc-10 CXX=g++-10 cmake .. -DEMLB_ENABLE_MODULES=ON
-
-# generate library
-cmake --build . --config Release
-```
-
 ### For script usage
 
 In this section, the model will be built as Python packages by using pybind11, 
@@ -102,6 +75,9 @@ conda activate emlb
 
 # Install requirements
 pip install -r requirements.txt
+
+# Install dv-toolkit
+pip install external/dv-toolkit/.
 ```
 
 + Compile with setting `-DEMLB_ENABLE_PYTHON`
@@ -116,10 +92,38 @@ CC=gcc-10 CXX=g++-10 cmake .. -DEMLB_ENABLE_PYTHON=ON
 # generate library
 cmake --build . --config Release
 ```
+
 + Run `demo.py` to test:
 
 ```bash
 python3 demo.py
+```
+
+### For DV software usage
+
+By following the steps below, you will obtain a series of `.so` files in the 
+`./modules` folder, which are third-party modules that can be called by 
+[DV software](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/). 
+For how to use them, please refer to the "set up for dv" in the 
+[tutorial](https://inivation.gitlab.io/dv/dv-docs/docs/first-module/).
+
++ Install dependencies for building modules.
+
+```bash
+sudo apt-get install dv-runtime-dev
+```
+
++ Compile with setting `-DEMLB_ENABLE_MODULES`
+
+```bash
+# create folder
+mkdir build && cd build
+
+# compile with samples
+CC=gcc-10 CXX=g++-10 cmake .. -DEMLB_ENABLE_MODULES=ON
+
+# generate library
+cmake --build . --config Release
 ```
 
 ### CUDA support <span id="cuda"></span>
