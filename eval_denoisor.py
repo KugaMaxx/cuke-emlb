@@ -18,8 +18,6 @@ if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Run single denoisor and evaluation.')
     parser.add_argument('-f', '--file', type=str, default='./data/demo/samples/demo-01.aedat4')
     parser.add_argument('--denoisor', type=str, default='ynoise', help='choose a denoisor')
-    parser.add_argument('--parameters', type=lambda x: {k:int(v) for k,v in (i.split(':') for i in x.split(','))}, 
-                        default="intThreshold: 1", help='set parameters of the denoisor')
     args = parser.parse_args()   
 
     # Load file to MonoCameraReader
@@ -28,15 +26,18 @@ if __name__ == '__main__':
     # Get Offline data
     data = reader.loadData()
 
+    # Get resolutiong
+    resolution = reader.getResolution("events")
+
     # Register event structural ratio
-    metric = EventStructuralRatio(reader.getResolution())
+    metric = EventStructuralRatio(resolution)
 
     # Print before filter
     score = metric.evalEventStorePerNumber(data["events"].toEventStore())
     print(f"Before filter >>>\n  {data['events']}, \n  ESR score: {score.mean():.3f}")
 
     # Initialize denoisor
-    model = Denoisor(args.denoisor, reader.getResolution(), args.parameters)
+    model = Denoisor(args.denoisor, resolution)
     
     # Receive noise sequence
     model.accept(data["events"])

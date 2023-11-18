@@ -30,6 +30,9 @@ if __name__ == '__main__':
     # Get Offline data
     data = reader.loadData()
 
+    # Get resolution
+    resolution = reader.getResolution("events")
+
     # Print basic info
     print(f"\nstarting demo, noise sequence length is {len(data['events'])}")
 
@@ -37,7 +40,7 @@ if __name__ == '__main__':
     print(f"{'='*35}\n{'Model':15s}{'Length':10s}{'Runtime':10s}\n{'-'*35}")
     
     # Set denoisors 2d-array layout
-    denoisors = args.denoisors
+    denoisors = args.denoisor_list
 
     # Running inference with each denoisor
     for denoisor in [elem for vec in denoisors for elem in vec]:
@@ -56,7 +59,7 @@ if __name__ == '__main__':
         print(f"{denoisor:10s}", end=" ")
 
         # Initialize denoisor
-        model = Denoisor(denoisor, reader.getResolution())
+        model = Denoisor(denoisor, resolution)
         # If you want to set other input parameters,
         # please check "./configs/denoisors.py"
 
@@ -76,7 +79,7 @@ if __name__ == '__main__':
     print(f"Completed! Running visualization (it may takes a few minutes).")
 
     # running animation
-    player = MultiDenoisorsPlayer(reader.getResolution(), denoisors)
+    player = MultiDenoisorsPlayer(resolution, denoisors)
 
     # View every 33 millisecond of events
     player.viewPerTimeInterval(data, "events", timedelta(milliseconds=33))

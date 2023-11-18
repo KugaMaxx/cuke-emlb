@@ -50,11 +50,14 @@ if __name__ == '__main__':
             # Get Offline data
             data = reader.loadData()
 
+            # Get resolutiong
+            resolution = reader.getResolution("events")
+
             # Register event structural ratio
-            metric = EventStructuralRatio(reader.getResolution())
+            metric = EventStructuralRatio(resolution)
 
             # Register denoisor
-            model = Denoisor(args.denoisor, reader.getResolution())
+            model = Denoisor(args.denoisor, resolution)
 
             # Receive noise sequence
             model.accept(data["events"])
@@ -69,7 +72,7 @@ if __name__ == '__main__':
                 if not osp.exists(output_path): os.makedirs(output_path)
 
                 # Writing
-                writer = kit.io.MonoCameraWriter(output_file, reader.getResolution())
+                writer = kit.io.MonoCameraWriter(output_file, resolution)
                 writer.writeData(data)
 
             # Store evaluation metric
