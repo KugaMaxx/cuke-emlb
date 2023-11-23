@@ -68,7 +68,7 @@ class knoise(Module):
 
 class mlpf(Module):
     def __init__(self, resolution, modified_params, 
-                 default_params = {"batchSize": 10000000,
+                 default_params = {"batchSize": 5000,
                                    "duration": timedelta(milliseconds=100),
                                    "floatThreshold":0.8,
                                    "deviceId": 0}):

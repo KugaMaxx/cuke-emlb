@@ -50,7 +50,7 @@ public:
 		mFloatThreshold(floatThreshold),
         mTimeSurface(mWidth, mHeight),
 		mDevice(torch::kCUDA, deviceId) {
-		// this->initialize();
+		this->initialize();
 	}
 
 	void initialize() {
