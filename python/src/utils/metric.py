@@ -177,7 +177,7 @@ class EventStructuralRatio(object):
         self.accumulator.accept(events)
         
         # get basic info
-        n = median_filter(self.accumulator.getPotentialSurface(), size=3)
+        n = self.accumulator.getPotentialSurface()
         N, M = events.size(), int(events.size() * 2 / 3)
         K = self.resolution[0] * self.resolution[1]  # n.size
 

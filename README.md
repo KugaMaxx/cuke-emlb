@@ -21,7 +21,7 @@ To ensure the running of the project, the following dependencies are need.
 sudo apt-get install git gcc-10 g++-10 cmake
 
 # Install boost, opencv, eigen3, openblas
-sudo apt-get install libboost-dev, libopencv-dev, libeigen3-dev, libopenblas-dev
+sudo apt-get install libboost-dev libopencv-dev libeigen3-dev libopenblas-dev
 ```
 
 + Install third-party dependencies for dv.
@@ -37,7 +37,7 @@ sudo apt-get update
 sudo apt-get install boost-inivation libcaer-dev libfmt-dev liblz4-dev libzstd-dev libssl-dev
 
 # Install dv
-sudo apt-get install dv-processing
+sudo apt-get install dv-processing dv-runtime-dev
 ```
 
 + Initialize our [dv-toolkit](https://github.com/KugaMaxx/yam-toolkit), for
@@ -106,12 +106,6 @@ By following the steps below, you will obtain a series of `.so` files in the
 [DV software](https://inivation.gitlab.io/dv/dv-docs/docs/getting-started/). 
 For how to use them, please refer to the "set up for dv" in the 
 [tutorial](https://inivation.gitlab.io/dv/dv-docs/docs/first-module/).
-
-+ Install dependencies for building modules.
-
-```bash
-sudo apt-get install dv-runtime-dev
-```
 
 + Compile with setting `-DEMLB_ENABLE_MODULES`
 
