@@ -61,6 +61,11 @@ find_package(Boost REQUIRED)
 # Find libfmt supports
 find_package(fmt REQUIRED)
 
+# Find compression supports
+INCLUDE(FindPkgConfig)
+PKG_CHECK_MODULES(liblz4 IMPORTED_TARGET liblz4)
+PKG_CHECK_MODULES(libzstd IMPORTED_TARGET libzstd)
+
 # Find libtorch supports
 if(EMLB_ENABLE_TORCH)
     set(CUDA_INCLUDE_DIRS "/usr/local/cuda/include")
