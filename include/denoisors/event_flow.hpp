@@ -28,6 +28,7 @@ public:
 		const size_t searchRadius = 1, const double floatThreshold = 20.0) :
 		mWidth(resolution.width),
 		mHeight(resolution.height),
+		mDuration(duration.count()),
         mSearchRadius(searchRadius),
         mFloatThreshold(floatThreshold) {
         this->initialize();
@@ -36,7 +37,7 @@ public:
     void initialize() {
     }
 
-	size_t fitEventFlow(const EventType &event) {
+	double fitEventFlow(const EventType &event) {
         // default flow value will be infinity
         double flow = std::numeric_limits<double>::max();
         
@@ -69,7 +70,7 @@ public:
 
 	bool evaluate(const EventType &event) {
 		// calculate density in spatio-temporal neighborhood
-		size_t flow = fitEventFlow(event);
+		double flow = fitEventFlow(event);
 
 		// evaluate
 		bool isSignal = (flow <= mFloatThreshold);
