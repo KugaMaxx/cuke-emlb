@@ -3,7 +3,12 @@
 ![](https://img.shields.io/github/v/tag/KugaMaxx/cuke-emlb?style=flat-square)
 ![](https://img.shields.io/github/license/KugaMaxx/cuke-emlb?style=flat-square)
 
-The simple benchmark for event-based denoising. Any questions please contact me with [KugaMaxx@outlook.com](mailto:KugaMaxx@outlook.com).
+E-MLB (Multilevel Benchmark for Event Denoising) is a benchmark specifically designed
+ for the evaluation of event-based denoising algorithms, providing an in-depth analysis 
+ of state-of-the-art (SOTA) denoising  algorithms' performance across various noise 
+ levels and real-world scenes captured by DAVIS 346. For more details, please refer 
+ to our published paper 
+ [E-MLB: Multilevel Benchmark for Event-Based Camera Denoising](https://ieeexplore.ieee.org/document/10078400).
 
 <span id="animation"></span>
 ![animation](https://raw.githubusercontent.com/KugaMaxx/cuke-emlb/main/assets/images/animation.gif "animation")
@@ -259,131 +264,24 @@ class your_denoisor:
         # /*-----------------------------------*/
 ```
 
+## BibTex
 
-
-## Citations
-
-### Projects using this repo
-
-This repository is derived from **[E-MLB: Multilevel Benchmark for Event-Based Camera Denoising](https://ieeexplore.ieee.org/document/10078400)**.
+If you use the E-MLB dataset or any of the code in this repository for your research, 
+ please cite our paper:
 
 ```bibtex
-@article{ding2023mlb,
-  title     = {E-MLB: Multilevel Benchmark for Event-Based Camera Denoising},
+@article{ding2023emlb,
+  title     = {E-MLB: Multilevel benchmark for event-based camera denoising},
   author    = {Ding, Saizhe and Chen, Jinze and Wang, Yang and Kang, Yu and Song, Weiguo and Cheng, Jie and Cao, Yang},
   journal   = {IEEE Transactions on Multimedia},
+  volume    = {26},
+  pages     = {65--76},
   year      = {2023},
   publisher = {IEEE}
 }
 ```
 
-### References
-
-<span id="ts"></span>
-**Time Surface** &nbsp; Hots: a hierarchy of event-based time-surfaces for pattern recognition
-
-```bibtex
-@article{lagorce2016hots,
-  title     = {Hots: a hierarchy of event-based time-surfaces for pattern recognition},
-  author    = {Lagorce, Xavier and Orchard, Garrick and Galluppi, Francesco and Shi, Bertram E and Benosman, Ryad B},
-  journal   = {IEEE transactions on pattern analysis and machine intelligence},
-  pages     = {1346--1359},
-  year      = {2016},
-  publisher = {IEEE}
-}
-```
-
-<span id="knoise"></span>
-**KNoise** &nbsp; O(N)-Space Spatiotemporal Filter for Reducing Noise in Neuromorphic Vision Sensors
-
-```bibtex
-@article{khodamoradi2018n,  
-  title     = {O(N)-Space Spatiotemporal Filter for Reducing Noise in Neuromorphic Vision Sensors},
-  author    = {Khodamoradi, Alireza and Kastner, Ryan},
-  journal   = {IEEE Transactions on Emerging Topics in Computing},
-  year      = {2018},
-  publisher = {IEEE}
-}
-```
-
-<span id="evflow"></span>
-**EvFlow** &nbsp; EV-Gait: Event-based robust gait recognition using dynamic vision sensors
-
-```bibtex
-@inproceedings{wang2019ev,
-  title     = {EV-Gait: Event-based robust gait recognition using dynamic vision sensors},
-  author    = {Wang, Yanxiang and Du, Bowen and Shen, Yiran and Wu, Kai and Zhao, Guangrong and Sun, Jianguo and Wen, Hongkai},
-  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  pages     = {6358--6367},
-  year      = {2019}
-}
-```
-
-<span id="ynoise"></span>
-**YNoise** &nbsp; Event density based denoising method for dynamic vision sensor
-
-```bibtex
-@article{feng2020event,
-  title     = {Event density based denoising method for dynamic vision sensor},
-  author    = {Feng, Yang and Lv, Hengyi and Liu, Hailong and Zhang, Yisa and Xiao, Yuyao and Han, Chengshan},
-  journal   = {Applied Sciences},
-  year      = {2020},
-  publisher = {MDPI}
-}
-```
-
-<span id="edncnn"></span>
-**EDnCNN** &nbsp; Event probability mask (epm) and event denoising convolutional neural network (edncnn) for neuromorphic cameras
-
-```bibtex
-@inproceedings{baldwin2020event,  
-  title     = {Event probability mask (epm) and event denoising convolutional neural network (edncnn) for neuromorphic cameras},
-  author    = {Baldwin, R and Almatrafi, Mohammed and Asari, Vijayan and Hirakawa, Keigo},
-  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  pages     = {1701--1710},
-  year      = {2020}
-}
-```
-
-<span id="dwf"></span>
-<span id="mlpf"></span>
-**DWF & MLPF** &nbsp; Low Cost and Latency Event Camera Background Activity Denoising
-
-```bibtex
-@article{guo2022low,  
-  title     = {Low Cost and Latency Event Camera Background Activity Denoising},
-  author    = {Guo, Shasha and Delbruck, Tobi},
-  journal   = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
-  year      = {2022},
-  publisher = {IEEE}
-}
-```
-
-<span id="evzoom"></span>
-**EvZoom** &nbsp; EventZoom: Learning to denoise and super resolve neuromorphic events
-
-```bibtex
-@inproceedings{duan2021eventzoom,
-  title     = {EventZoom: Learning to denoise and super resolve neuromorphic events},
-  author    = {Duan, Peiqi and Wang, Zihao W and Zhou, Xinyu and Ma, Yi and Shi, Boxin},
-  booktitle = {Proceedings of the IEEE/CVF Conference on Computer Vision and Pattern Recognition},
-  pages     = {12824--12833},
-  year      = {2021}
-}
-```
-
-<span id="gef"></span>
-**GEF** &nbsp; Guided event filtering: Synergy between intensity images and neuromorphic events for high performance imaging
-
-```bibtex
-@article{duan2021guided,
-  title     = {Guided event filtering: Synergy between intensity images and neuromorphic events for high performance imaging},
-  author    = {Duan, Peiqi and Wang, Zihao W and Shi, Boxin and Cossairt, Oliver and Huang, Tiejun and Katsaggelos, Aggelos K},
-  journal   = {IEEE Transactions on Pattern Analysis and Machine Intelligence},
-  year      = {2021},
-  publisher = {IEEE}
-}
-```
-
 ## Acknowledgement
-Special thanks to [Yang Wang](mailto:ywang120@ustc.edu.cn).
+
+We would like to thank [Yang Wang](mailto:ywang120@ustc.edu.cn) for his valuable
+ insights and support in this project.
