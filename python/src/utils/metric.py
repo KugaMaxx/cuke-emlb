@@ -78,7 +78,7 @@ class EventStructuralRatioV2(object):
                                 interval: int = 30000):
         # slice data
         slicer, score = dv.EventStreamSlicer(), list()
-        slicer.doEveryNumberOfEvents(
+        slicer.doEveryNumberOfElements(
             interval, 
             lambda events: score.append(self._calc_esr(events))
         )
@@ -163,7 +163,7 @@ class EventStructuralRatio(object):
                                 interval: int = 30000):
         # slice data
         slicer, score = dv.EventStreamSlicer(), list()
-        slicer.doEveryNumberOfEvents(
+        slicer.doEveryNumberOfElements(
             interval, 
             lambda events: score.append(self._calc_esr(events))
         )
