@@ -23,7 +23,7 @@ To ensure the running of the project, the following dependencies are need.
 
 ```bash
 # Install compiler
-sudo apt-get install git gcc-10 g++-10 cmake
+sudo apt-get install git gcc-13 g++-13 cmake
 
 # Install boost, opencv, eigen3, openblas
 sudo apt-get install libboost-dev libopencv-dev libeigen3-dev libopenblas-dev
@@ -39,7 +39,7 @@ sudo add-apt-repository ppa:inivation-ppa/inivation
 sudo apt-get update
 
 # Install pre dependencies
-sudo apt-get install boost-inivation libcaer-dev libfmt-dev liblz4-dev libzstd-dev libssl-dev
+sudo apt-get install boost-inivation libcaer-dev libfmt-dev liblz4-dev libzstd-dev libssl-dev libusb-1.0-0-dev
 
 # Install dv
 sudo apt-get install dv-processing dv-runtime-dev
@@ -92,7 +92,7 @@ pip install external/dv-toolkit/.
 mkdir build && cd build
 
 # compile with samples
-CC=gcc-10 CXX=g++-10 cmake .. -DEMLB_ENABLE_PYTHON=ON
+CC=gcc-13 CXX=g++-13 cmake .. -DEMLB_ENABLE_PYTHON=ON
 
 # generate library
 cmake --build . --config Release
@@ -119,7 +119,7 @@ For how to use them, please refer to the "set up for dv" in the
 mkdir build && cd build
 
 # compile with samples
-CC=gcc-10 CXX=g++-10 cmake .. -DEMLB_ENABLE_MODULES=ON
+CC=gcc-13 CXX=g++-13 cmake .. -DEMLB_ENABLE_MODULES=ON
 
 # generate library
 cmake --build . --config Release
@@ -132,9 +132,9 @@ installed, you can include `-DTORCH_DIR=/path/to/libtorch/` to compile deep
 learning models. For example, you can build by following instruction.
 
 ```bash
-CC=gcc-10 CXX=g++-10 cmake .. \
--DEMLB_ENABLE_PYTHON=ON \
--DTORCH_DIR=<path/to/libtorch>/share/cmake/Torch/
+CC=gcc-13 CXX=g++-13 cmake .. \
+    -DEMLB_ENABLE_PYTHON=ON \
+    -DTORCH_DIR=<path/to/libtorch>/share/cmake/Torch/
 ```
 
 NOTE: download pretrained models [here](https://drive.google.com/drive/folders/1BytQnsNRlv1rJyMotElIqklOz1oCt2Vd?usp=sharing) 
@@ -163,8 +163,8 @@ You can run `eval_denoisor.py` to test one of the above denoising algorithms:
 
 ```bash
 python eval_denoisor.py                     \
---file './data/demo/samples/demo-01.aedat4' \
---denoisor 'ynoise'                         
+    --file './data/demo/samples/demo-01.aedat4' \
+    --denoisor 'ynoise'                         
 ```
 
 + `--file` / `-f`: path of sequence data.
@@ -180,9 +180,9 @@ You can run `eval_benchmark.py` to test all sequences store in `./data` folder.
 
 ```bash
 python eval_benchmark.py  \
---input_path './data'     \
---output_path './result'  \
---denoisor 'ynoise' --store_result --store_score
+    --input_path './data'     \
+    --output_path './result'  \
+    --denoisor 'ynoise' --store_result --store_score
 ```
 
 + `--input_path` / `-i`: path of the datasets folder.
